@@ -6,7 +6,9 @@
    background-color: #f8f9fa;
 }
 
-label {
+label { 
+
    display: block;
+   
    margin-bottom: 5px;
 }

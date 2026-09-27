@@ -39,6 +39,7 @@ export async function handleGetData(info, tableBody) {
     const tdActions = document.createElement("td");
     tdActions.classList.add("d-flex", "gap-2");
 
+    
     const editButton = document.createElement("button");
     editButton.textContent = "Edit";
     editButton.classList.add("btn", "btn-outline-success", "btn-sm");
@@ -51,7 +52,7 @@ export async function handleGetData(info, tableBody) {
     tdActions.appendChild(editButton);
     tdActions.appendChild(deleteButton);
 
-    
+
     tdTitle.textContent = d.title;
     tdAmount.textContent = d.amount;
     spanCategory.textContent = d.category;

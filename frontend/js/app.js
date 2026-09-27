@@ -73,6 +73,7 @@ async function getExpenses() {
   }catch(error){
     console.error("Error getting expenses:", error);
   }
+  
 }
 
 
