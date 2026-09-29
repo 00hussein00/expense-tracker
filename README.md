@@ -51,5 +51,15 @@ the user to follow up his Expense
 
 ## What was the hardest part?
 **Backend**
+1. just a small proplem when orgnize the code, and try to make it general, like a function sendQuerey its take a long time to do it and use it.
+2. how pass the id of the element.
+3. i have an error becuse i forget to add type="module" to js 
+
+
+
 
 **FrontEnd**
+1. make a simple design like alighn item in the table
+2. make the connection bettwen the edit form and the PUL method 
+3. let the edit Form appear in the top layers
+4. write a method like updateExpense and addExpense
