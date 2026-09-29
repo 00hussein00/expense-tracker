@@ -2,15 +2,18 @@
 import {
   handleGetData,
   getTotalAmount,
-  getMaxExpenses
+  getMaxExpenses,
+  isValidAmount
 } from "./function.js";
 
 
-// Expense Tracker - frontend logic
+let dataExpensTracker = [];
 
 const API_URL = "http://localhost:3000/api/expenses";  //process.env.API_URL;
+
+// for table of date
 const tableBody = document.getElementById("table-body");
-const form = document.getElementById("expense-form");
+const catFillter = document.getElementById("filter-category");
 
 //card data 
 const totalAmount = document.getElementById("total-amount");
@@ -18,31 +21,27 @@ const numberOfExpenses = document.getElementById("number-of-expenses");
 const highestExpense = document.getElementById("highest-expense");
 
 
-// try to do cataegory
-/*
-const catFillter = document.getElementById("filter-category");
 
 
-async function catFiltterd() {
-  console.log(catFillter.value);
-  const data = await getExpenses();
-  data.forEach( async e => {
-    if(catFillter.value == "All" || catFillter.value == ""){
-      handleGetData(data,tableBody);
-    }
-    else if(e.category == catFillter.value){
-      
-    }
-    
-  });
-  
-}
+// Form 
+const addForm = document.getElementById("expense-form");
+const formTitle = document.getElementById("title");
+const formAmount = document.getElementById("amount");
+const formCategory = document.getElementById("category");
+const formDate = document.getElementById("date");
 
 
-catFillter.addEventListener("change",catFiltterd)
-catFiltterd();
+// edit Form
+const editContainer = document.getElementById("edit-container");
+const btnCancel = document.getElementById("btn-cancel");
+const editForm = document.getElementById("edit-form");
+const newTitle =   document.getElementById("newtitle");
+const newAmount =   document.getElementById("newamount");
+const newCategory =   document.getElementById("newcategory");
+const newdate =   document.getElementById("newdate");
+let currentEditFieldID = 0;
 
-*/
+
 
 // PHASE 2
 // Your backend from Phase 1 is already running, with real expenses in the
@@ -51,17 +50,16 @@ catFiltterd();
 // this time, and no sample data file.
 //
 // A possible structure (change it if you have a better idea):
+
 //   - async function getExpenses()          fetch(API_URL), return the JSON
-
-
-
-// Call the function
 async function getExpenses() {
   try{
     const response = await fetch(API_URL);
     if(response.ok){
       const data = await response.json();
-      // set card value
+      dataExpensTracker = await data;
+
+      // set card value 
       totalAmount.innerHTML = getTotalAmount(data);
       numberOfExpenses.textContent = data.length;
       highestExpense.innerHTML = getMaxExpenses(data);
@@ -73,10 +71,10 @@ async function getExpenses() {
   }catch(error){
     console.error("Error getting expenses:", error);
   }
-  
 }
 
 
+// render the table 
 handleGetData(await getExpenses(),tableBody);
 
 //   - async function addExpense(data)       fetch(API_URL, { method: "POST", ... })
@@ -93,13 +91,11 @@ async function addExpense(data) {
     const result = await response.json();
 
     if (!response.ok) {
-      // Handles 400 validation errors sent from backend
       console.log(`Error: ${result.error}`);
       return false;
     }
 
-    console.log("Expense added successfully:", result);
-    // flag to indicate 
+    console.log("Expense added done:", result);
     return true; 
 
   } catch (error) {
@@ -108,35 +104,129 @@ async function addExpense(data) {
   }
 }
 
-form.addEventListener("submit", async (e) => {
+addForm.addEventListener("submit", async (e) => {
 
   e.preventDefault();
 
+  if(!isValidAmount(formAmount))
+    return;
+
   const newExpense = {
-    title: document.getElementById("title").value.trim(),
-    amount: parseFloat(document.getElementById("amount").value),
-    category: document.getElementById("category").value,
-    date: document.getElementById("date").value,
+    title:formTitle.value.trim(),
+    amount: parseFloat(formAmount.value),
+    category: formCategory.value,
+    date: formDate.value,
   };
 
   const success = await addExpense(newExpense);
 
-  //Reset form and refresh table on success
   if (success) {
-    form.reset();
+    //Reset form and refresh table
+    addForm.reset();
     handleGetData(await getExpenses(),tableBody);
   }
 });
 
-
 //   - async function updateExpense(id,data) fetch(API_URL + "/" + id, { method: "PUT", ... })
-//   - async function deleteExpense(id)      fetch(API_URL + "/" + id, { method: "DELETE" })
+async function updateExpense(id, data) {
+  try {
+    const response = await fetch(API_URL + "/" + id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+    const result = await response.json();
 
+    if (!response.ok) {
+      console.log(`error: ${result.error}`);
+      return false;
+    }
+
+    console.log("Expense update done:", result);
+    return true;
+
+  } catch (error) {
+    console.log("error when update the filed with id " + id);
+    return false;
+  }
+}
+
+btnCancel.addEventListener("click", () => {
+  editContainer.style.display = "none";
+});
+
+export function passValueToForm(id,title,amount,cat,date){
+  editContainer.style.display = "flex";
+  currentEditFieldID = id;
+  newTitle.value = title;
+  newAmount.value = amount;
+  newCategory.value = cat;
+  newdate.value = date;
+}
+
+editForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!isValidAmount(newAmount))
+    return;
+
+  const edittedExpenses = {
+    title: newTitle.value.trim(),
+    amount: parseFloat(newAmount.value),
+    category: newCategory.value,
+    date: newdate.value,
+  };
+
+  const success = await updateExpense(currentEditFieldID, edittedExpenses);
+
+  if (success) {
+    editContainer.style.display = "none";
+    handleGetData(await getExpenses(), tableBody);
+  }
+});
+
+//   - async function deleteExpense(id)      fetch(API_URL + "/" + id, { method: "DELETE" })
+export async function deleteExpense(id) {
+  try {
+    const respone = await fetch(API_URL + "/" + id,
+    {
+      method: "DELETE"
+    })
+
+    const result = await respone.json();
+    if (!respone.ok) {
+      console.log(`Error: ${result.error}`);
+      return false;
+    }
+    console.log("Expense deletes done:", result);
+    return true;
+
+  } catch (error) {
+    console.log("Error when delete this row " + id);
+  } finally {
+    handleGetData(await getExpenses(), tableBody);
+  }
+}  
+
+/* ---------------------
 //   - async function refresh()              get the list, then call renderTable and renderSummary
 //   - renderTable(list)                     build the table rows from the array the API returned
+//  its inside  handle get data 
 //   - renderSummary(list)                   update the summary cards
+// i put it inside get expense 
+ ---------------------- */
+ 
+ /*-------
 //   - applyFilter()                         re-render with the list filtered by category
-//
+// i put it inside handle get data and pass a code from data 
+--------*/
+catFillter.addEventListener("change", () =>
+  handleGetData(dataExpensTracker, tableBody, catFillter.value)
+);
+
+
 // Don't forget:
 //   - Show a Bootstrap spinner while a request is in flight.
 //   - Wrap every fetch call in try/catch, and show a Bootstrap alert on failure.

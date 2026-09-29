@@ -18,8 +18,8 @@ the user to follow up his Expense
      use folder **schema.sql** and run it 
 2. create a .env file and fill it with your data
 3. move to backend directory from your terminal
-     ```bash cd backend ```
-4. run this command ```bash node server.js ``` to run the back end  
+     ```cd backend ```
+4. run this command ```node server.js ``` to run the back end  
 
 **Frontend**
 1. you just run it useing liveServer you wannat 
@@ -35,11 +35,18 @@ the user to follow up his Expense
 - [ ] Summary cards (total, count, highest)
 - [ ] Data is saved in a PostgreSQL database
 
-## Screenshots
 
-![alt text](image.png)
-<!-- Add 2-3 screenshots of your app (desktop and mobile). -->
+## Screenshots
+**Main Page**
+  <img src="img/main.png" alt="Project Screenshot" width="600">
+
+**Edit Form**
+  <img src="img/editForm.png" alt="Project Screenshot" width="600">
+
+
+
 
 ## What was the hardest part?
+**Backend**
 
-<!-- A short paragraph: what got you stuck, and how did you solve it? -->
+**FrontEnd**

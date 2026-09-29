@@ -1,14 +1,31 @@
 /* Your custom styles go here.
    Use Bootstrap classes first, and write your own CSS only when you need to. */
-
-
 .body {
    background-color: #f8f9fa;
 }
 
 label { 
-
    display: block;
-   
    margin-bottom: 5px;
+}
+
+
+.sheftRight{
+   text-align: end !important ;
+}
+
+#edit-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1; 
+  background-color: rgba(0, 0, 0, 0.5); 
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+#edit-container .row {
+  width: 100%;
 }
