@@ -38,11 +38,14 @@ the user to follow up his Expense
 
 ## Screenshots
 **Main Page**
+<p>
   <img src="img/main.png" alt="Project Screenshot" width="600">
+</P>
 
 **Edit Form**
+<P>
   <img src="img/editForm.png" alt="Project Screenshot" width="600">
-
+</P>
 
 
 
