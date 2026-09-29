@@ -22,8 +22,7 @@ the user to follow up his Expense
 4. run this command ```bash node server.js ``` to run the back end  
 
 **Frontend**
-
-1. ...
+1. you just run it useing liveServer you wannat 
 
 ## Features
 
@@ -38,6 +37,7 @@ the user to follow up his Expense
 
 ## Screenshots
 
+![alt text](image.png)
 <!-- Add 2-3 screenshots of your app (desktop and mobile). -->
 
 ## What was the hardest part?
