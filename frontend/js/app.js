@@ -20,16 +20,12 @@ const totalAmount = document.getElementById("total-amount");
 const numberOfExpenses = document.getElementById("number-of-expenses");
 const highestExpense = document.getElementById("highest-expense");
 
-
-
-
 // Form 
 const addForm = document.getElementById("expense-form");
 const formTitle = document.getElementById("title");
 const formAmount = document.getElementById("amount");
 const formCategory = document.getElementById("category");
 const formDate = document.getElementById("date");
-
 
 // edit Form
 const editContainer = document.getElementById("edit-container");
@@ -40,6 +36,11 @@ const newAmount =   document.getElementById("newamount");
 const newCategory =   document.getElementById("newcategory");
 const newdate =   document.getElementById("newdate");
 let currentEditFieldID = 0;
+
+// for cancel the update
+btnCancel.addEventListener("click", () => {
+  editContainer.style.display = "none";
+});
 
 
 
@@ -94,10 +95,8 @@ async function addExpense(data) {
       console.log(`Error: ${result.error}`);
       return false;
     }
-
-    console.log("Expense added done:", result);
+    // indicate the data added
     return true; 
-
   } catch (error) {
     console.error("Error adding expense:", error);
     return false;
@@ -140,23 +139,18 @@ async function updateExpense(id, data) {
     const result = await response.json();
 
     if (!response.ok) {
-      console.log(`error: ${result.error}`);
+      console.error(`error: ${result.error}`);
       return false;
     }
-
-    console.log("Expense update done:", result);
+    // itdicated the data updated
     return true;
-
   } catch (error) {
-    console.log("error when update the filed with id " + id);
+    console.error("error when update the filed with id " + id);
     return false;
   }
 }
 
-btnCancel.addEventListener("click", () => {
-  editContainer.style.display = "none";
-});
-
+// call it inside the function.js
 export function passValueToForm(id,title,amount,cat,date){
   editContainer.style.display = "flex";
   currentEditFieldID = id;
@@ -188,23 +182,24 @@ editForm.addEventListener("submit", async (e) => {
 });
 
 //   - async function deleteExpense(id)      fetch(API_URL + "/" + id, { method: "DELETE" })
+// call it inside the function.js
 export async function deleteExpense(id) {
   try {
     const respone = await fetch(API_URL + "/" + id,
-    {
-      method: "DELETE"
-    })
+      {
+        method: "DELETE"
+      })
 
     const result = await respone.json();
     if (!respone.ok) {
-      console.log(`Error: ${result.error}`);
+      console.error(`Error: ${result.error}`);
       return false;
     }
-    console.log("Expense deletes done:", result);
+    // indicator the files was deleted
     return true;
 
   } catch (error) {
-    console.log("Error when delete this row " + id);
+    console.error("Error when delete this row " + id);
   } finally {
     handleGetData(await getExpenses(), tableBody);
   }

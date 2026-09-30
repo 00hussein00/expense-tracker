@@ -1,16 +1,4 @@
-
-export async function sendQuery(query, res, pool,errorMsg = "Failed to fetch data") {
-    try {
-        const result = await pool.query(query);
-        return res.json(result.rows);
-    } catch (error) {
-        console.error("Database query error:", error);
-        //Server Error 
-        res.status(500).json({ error: errorMsg });
-    }
-};
-
-export async function sendQueryWithParams(query, res, pool,errorMsg = "Failed to fetch data", params = []) {
+export async function sendQuery(query, res, pool,errorMsg = "Failed to process it", params = []) {
     try {
         const result = await pool.query(query, params);
         

@@ -5,22 +5,21 @@
 //   1. Create a database named expense_tracker and run schema.sql on it.
 //   2. Copy .env.example to a new file named .env and write your PostgreSQL password.
 //   3. npm install express cors pg dotenv
-// Run:    node server.js   (restart it every time you change this file)
 
+// Run:    node server.js   (restart it every time you change this file)
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { Pool } from "pg";
 import {
   sendQuery,
-  sendQueryWithParams,
   handleValidateData
 } from "./function.js";
 
 dotenv.config();
 const app = express();
 app.use(cors());
-//to parse JSON body payloads
+//to parse JSON body
 app.use(express.json());
 
 const pool = new Pool({
@@ -35,19 +34,14 @@ pool.connect((err, client, release) => {
   if (err) {
     return console.error("Error connecting to PostgreSQL database:", err.stack);
   }
-  console.log("Successfully connected to PostgreSQL database!");
   release();
 });
 
 // Endpoints you need to build:
-
 //   GET    /api/expenses        return all expenses
 app.get('/api/expenses', async (req, res) => {
   const query = "SELECT id, title, amount, category,date FROM expenses";
-  const result = await sendQueryWithParams(query, res, pool, "Failed when getting data");
-  console.log("GET /api/expenses done");
-  //console.log(result);
-
+  await sendQuery(query, res, pool, "Failed when getting data");
 });
 
 
@@ -58,9 +52,7 @@ app.get("/api/expenses/:id", async (req, res) => {
     //400 Bad Request
     return res.status(400).json({ error: "Invalid ID format. ID must be an integer." });
   }
-  const result = await sendQueryWithParams("SELECT * FROM expenses WHERE id = $1", res, pool, "Failed when get data by ID", [id]);
-  console.log("GET /api/expenses/:id Done");
-  //console.log(result);
+  await sendQuery("SELECT * FROM expenses WHERE id = $1", res, pool, "Failed when get data by ID", [id]);
 })
 
 
@@ -73,16 +65,13 @@ app.post("/api/expenses", async (req, res) => {
     return res.status(400).json({ error: message });
   }
 
-  const result = await sendQueryWithParams(
+  await sendQuery(
     "INSERT INTO expenses (title, amount, category, date) VALUES ($1, $2, $3, $4) RETURNING *",
     res,
     pool,
     "Failed to add expense",
     [title, amount, category, date]
   );
-  console.log("POST /api/expenses Done");
-  //console.log(result);
-
 });
 
 
@@ -100,17 +89,13 @@ app.put("/api/expenses/:id", async (req, res) => {
   }
   
   const { title, amount, category, date } = req.body;
-  const result = await sendQueryWithParams(
+  await sendQuery(
     "UPDATE expenses SET title = $1, amount = $2, category = $3, date = $4 WHERE id = $5 RETURNING *",
     res,
     pool,
     "Failed to update expense",
     [title, amount, category, date, id]
   );
-  console.log("PUT /api/expenses/:id Done");
-  //console.log(result);
-
-
 });
 
 
@@ -122,15 +107,13 @@ app.delete("/api/expenses/:id", async (req, res) => {
     return res.status(400).json({ error: "Invalid ID format. ID must be an integer." });
   }
 
-  const result = await sendQueryWithParams(
+  await sendQuery(
     "DELETE FROM expenses WHERE id = $1 RETURNING *",
     res,
     pool,
     "Failed to delete expense",
     [id]
   );
-  console.log("DELETE /api/expenses/:id Done");
-  //console.log(result);
 });
 
 
@@ -153,7 +136,7 @@ app.delete("/api/expenses/:id", async (req, res) => {
 //   - Check the id before the query. A text like "abc" makes PostgreSQL throw an error. -- done
 //   - Enable CORS so the frontend can talk to the server.  -- done
 
-//   - Test every endpoint with Thunder Client BEFORE you connect the frontend.
+//   - Test every endpoint with Thunder Client BEFORE you connect the frontend. -- done
 
 
 
