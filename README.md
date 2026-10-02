@@ -45,6 +45,9 @@ the user to follow up his Expense
   <img src="img/editForm.png" alt="Project Screenshot" width="600">
 </P>
 
+**Demo Video**
+
+https://youtu.be/7AIYDJltOJ4?si=s-tNFdqAoOKuogxS
 
 
 ## What was the hardest part?
