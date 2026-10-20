@@ -46,7 +46,6 @@ the user to follow up his Expense
 </P>
 
 
-
 ## What was the hardest part?
 **Backend**
 1. just a small proplem when orgnize the code, and try to make it general, like a function sendQuerey its take a long time to do it and use it.
