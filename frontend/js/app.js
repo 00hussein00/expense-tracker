@@ -9,7 +9,7 @@ import {
 
 let dataExpensTracker = [];
 
-const API_URL = "http://localhost:3000/api/expenses";  //process.env.API_URL;
+const API_URL = "http://localhost:4000/api/expenses";  //process.env.API_URL;
 
 // for table of date
 const tableBody = document.getElementById("table-body");
@@ -52,6 +52,12 @@ btnCancel.addEventListener("click", () => {
 //
 // A possible structure (change it if you have a better idea):
 
+const notificationContainer = document.getElementById("notification-container");
+const notificationBtn = document.getElementById("btn-close-notification");
+notificationBtn.addEventListener("click", () => {
+  notificationContainer.style.display = "none";
+});
+
 //   - async function getExpenses()          fetch(API_URL), return the JSON
 async function getExpenses() {
   try{
@@ -70,7 +76,10 @@ async function getExpenses() {
       console.error("Failed to get expenses :", response.error);
     }
   }catch(error){
+    // if the server is down
+
     console.error("Error getting expenses:", error);
+    notificationContainer.style.display = "block";
   }
 }
 

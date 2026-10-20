@@ -19,7 +19,7 @@ import {
 dotenv.config();
 const app = express();
 app.use(cors());
-//to parse JSON body
+//to parse JSON body // not valid json
 app.use(express.json());
 
 const pool = new Pool({
@@ -144,6 +144,6 @@ app.delete("/api/expenses/:id", async (req, res) => {
 
 
 
-app.listen(3000, () => {
+app.listen(4000, () => {
   console.log('http://localhost:3000');
 });
